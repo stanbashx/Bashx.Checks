@@ -2,6 +2,8 @@
 
 tests='src/test/bash'
 
+. $tests/eq_test.sh
+
 . $tests/check_coverage.sh
 
 . $tests/license_test.sh
