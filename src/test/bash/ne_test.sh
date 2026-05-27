@@ -4,16 +4,12 @@ SCRIPT="src/main/bash/ne.sh"
 
 echo "Running test of \"${SCRIPT}\"..."
 
-. $asserts/file/exists.sh "${SCRIPT}"
+. $asserts/file/not/empty.sh "${SCRIPT}"
 
-# todo asserts is not empty
 # todo asserts is executable
 
-if [[ ! -s "${SCRIPT}" ]]; then
- echo "File \"${SCRIPT}\" is empty!" >&2; exit 1
-elif [[ ! -x "${SCRIPT}" ]]; then
- echo "File \"${SCRIPT}\" is not executable!" >&2; exit 1
-fi
+if [[ ! -x "${SCRIPT}" ]]; then
+ echo "File \"${SCRIPT}\" is not executable!" >&2; exit 1; fi
 
 # todo asserts script
 
