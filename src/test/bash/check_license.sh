@@ -1,10 +1,7 @@
 #!/usr/local/bin/bash
 
 ISSUER='LICENSE'
-. $asserts/file/exists.sh "${ISSUER}"
-# todo asserts is not empty
-if [[ ! -s "${ISSUER}" ]]; then
- echo "File \"${ISSUER}\" is empty!"; exit 1; fi
+. $asserts/file/not/empty.sh "${ISSUER}"
 
 AUTHOR='Stanley Wintergreen'
 REGEX="Copyright 2[0-9]{3} ${AUTHOR}"

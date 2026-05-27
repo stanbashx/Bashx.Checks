@@ -1,21 +1,14 @@
 #!/usr/local/bin/bash
 
 ISSUER='build/yml/metadata.yml'
-. $asserts/file/exists.sh "${ISSUER}"
-# todo asserts is not empty
-if [[ ! -s "${ISSUER}" ]]; then
- echo "File \"${ISSUER}\" is empty!"; exit 1; fi
+. $asserts/file/not/empty.sh "${ISSUER}"
 
 VERSION="$(yq -erM -p=yml -o=json .version "${ISSUER}")" || exit 1
 REP_OWNER="$(yq -erM -p=yml -o=json .repository.owner "${ISSUER}")" || exit 1
 REP_NAME="$(yq -erM -p=yml -o=json .repository.name "${ISSUER}")" || exit 1
 
 ISSUER='README.md'
-. $asserts/file/exists.sh "${ISSUER}"
-# todo asserts is not empty
-if [[ ! -s "${ISSUER}" ]]; then
- echo "File \"${ISSUER}\" is empty!"; exit 1; fi
-
+. $asserts/file/not/empty.sh "${ISSUER}"
 
 EXPECTED_RELEASE="
 \`${VERSION}\`

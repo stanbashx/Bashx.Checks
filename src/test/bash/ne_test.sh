@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 
-SCRIPT="src/main/bash/eq.sh"
+SCRIPT="src/main/bash/ne.sh"
 
 echo "Running test of \"${SCRIPT}\"..."
 
@@ -45,13 +45,13 @@ STDERR="$(mktemp)"
 
 :> "${STDERR}"
 
-"${SCRIPT}" 'a' 'b' 'c' 2>"${STDERR}"; CODE=$?
+"${SCRIPT}" 'a' 'a' 'c' 2>"${STDERR}"; CODE=$?
 . $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
 . $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'c'
 
 :> "${STDERR}"
 
-"${SCRIPT}" 'a' 'a' 'c' 2>"${STDERR}"; CODE=$?
+"${SCRIPT}" 'a' 'b' 'c' 2>"${STDERR}"; CODE=$?
 . $asserts/eq.sh "${SCRIPT}" "${CODE}" '0'
 . $asserts/empty.sh "${SCRIPT}" "$(<"${STDERR}")"
 
