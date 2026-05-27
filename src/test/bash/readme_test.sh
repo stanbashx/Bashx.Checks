@@ -1,22 +1,21 @@
 #!/usr/local/bin/bash
 
 ISSUER='build/yml/metadata.yml'
-if [[ ! -f "${ISSUER}" ]]; then
- echo "No file \"${ISSUER}\"!"; exit 1
-elif [[ ! -s "${ISSUER}" ]]; then
- echo "File \"${ISSUER}\" is empty!"; exit 1
-fi
+. $asserts/file/exists.sh "${ISSUER}"
+# todo asserts is not empty
+if [[ ! -s "${ISSUER}" ]]; then
+ echo "File \"${ISSUER}\" is empty!"; exit 1; fi
 
 VERSION="$(yq -erM -p=yml -o=json .version "${ISSUER}")" || exit 1
 REP_OWNER="$(yq -erM -p=yml -o=json .repository.owner "${ISSUER}")" || exit 1
 REP_NAME="$(yq -erM -p=yml -o=json .repository.name "${ISSUER}")" || exit 1
 
 ISSUER='README.md'
-if [[ ! -f "${ISSUER}" ]]; then
- echo "No file \"${ISSUER}\"!"; exit 1
-elif [[ ! -s "${ISSUER}" ]]; then
- echo "File \"${ISSUER}\" is empty!"; exit 1
-fi
+. $asserts/file/exists.sh "${ISSUER}"
+# todo asserts is not empty
+if [[ ! -s "${ISSUER}" ]]; then
+ echo "File \"${ISSUER}\" is empty!"; exit 1; fi
+
 
 EXPECTED_RELEASE="
 \`${VERSION}\`
@@ -38,6 +37,8 @@ EXPECTED_TEXTS=(
  "${EXPECTED_BUILD_AND_INSTALL}"
  "${EXPECTED_DOWNLOAD_AND_INSTALL}"
 )
+
+# todo asserts file contains
 
 for EXPECTED_TEXT in "${EXPECTED_TEXTS[@]}"; do
  ALL_TEXT="$(< "${ISSUER}")"
