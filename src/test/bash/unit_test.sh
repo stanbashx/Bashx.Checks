@@ -26,4 +26,4 @@ done < <(find "${TESTS}" -depth -type f -print0)
 . ${TESTS}/check_license.sh
 . ${TESTS}/check_readme.sh
 
-echo 'All tests were successful.'
+echo 'All tests passed.'
