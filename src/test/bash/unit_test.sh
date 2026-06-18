@@ -1,5 +1,8 @@
 #!/usr/local/bin/bash
 
+if [[ ! -d "${asserts}" ]]; then
+ echo 'No asserts!' >&2; exit 1; fi
+
 TESTS='src/test/bash'
 
 # todo unit_test.sh -> check_tests.sh

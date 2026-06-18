@@ -1,58 +1,81 @@
 #!/usr/local/bin/bash
 
-SCRIPT='src/main/bash/ne.sh'
+SCRIPT='src/main/bash/strings/ne.sh'
 
-echo "Running test of \"${SCRIPT}\"..."
+echo "Running test for \"${SCRIPT}\"..."
 
-. $asserts/file/not/empty.sh "${SCRIPT}"
+. $asserts/files/execs.sh "${SCRIPT}"
 
-# todo asserts is executable
+if ! /usr/local/bin/bash -n "${SCRIPT}"; then
+ echo "\"${SCRIPT}\" has invalid syntax!" >&2; exit 1; fi
 
-if [[ ! -x "${SCRIPT}" ]]; then
- echo "File \"${SCRIPT}\" is not executable!" >&2; exit 1; fi
-
-# todo asserts script
-
+STDOUT="$(mktemp)"
 STDERR="$(mktemp)"
 
-"${SCRIPT}" 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'Wrong arguments!'
+#
 
+"${SCRIPT}" >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
+
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" '' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
-"${SCRIPT}" '' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'Wrong arguments!'
-
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" '' '' '' '' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
-"${SCRIPT}" '' '' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'Wrong arguments!'
-
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" 'a' 'a' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
-"${SCRIPT}" '' '' '' '' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'Wrong arguments!'
-
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" 'a' 'b' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '0'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
-"${SCRIPT}" '' '' '' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'No message!'
-
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" 'a' 'a' 'c' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'c\n'
 
-"${SCRIPT}" 'a' 'a' 'c' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '1'
-. $asserts/eq.sh "${SCRIPT}" "$(<"${STDERR}")" 'c'
-
+:> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" 'a' 'b' 'c' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '0'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
-"${SCRIPT}" 'a' 'b' 'c' 2>"${STDERR}"; CODE=$?
-. $asserts/eq.sh "${SCRIPT}" "${CODE}" '0'
-. $asserts/empty.sh "${SCRIPT}" "$(<"${STDERR}")"
+:> "${STDOUT}"
+:> "${STDERR}"
+"${SCRIPT}" 'a' 'a' '' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No message!\n'
 
+:> "${STDOUT}"
+:> "${STDERR}"
+"${SCRIPT}" 'a' 'b' '' >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No message!\n'
+
+#
+
+rm "${STDOUT}"
 rm "${STDERR}"
