@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 
-SCRIPT="src/main/bash/ne.sh"
+SCRIPT='src/main/bash/ne.sh'
 
 echo "Running test of \"${SCRIPT}\"..."
 
