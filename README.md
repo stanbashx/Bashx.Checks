@@ -1,5 +1,5 @@
 # Bashx.Checks
-A few checks scripts.
+A few check scripts.
 
 ---
 
