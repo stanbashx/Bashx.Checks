@@ -59,21 +59,21 @@ ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='' "${SCRIPT}" ASSERTS_FOO ASSERTS_B
 ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" '' ASSERTS_BAR ASSERTS_BAZ >"${STDOUT}" 2>"${STDERR}"
 . $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
 . $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" $'Argument 1/3 name is empty!\n'
+. $asserts/files/equals.sh "${STDERR}" $'Argument name 1/3 is empty!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
 ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" ASSERTS_FOO '' ASSERTS_BAZ >"${STDOUT}" 2>"${STDERR}"
 . $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
 . $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" $'Argument 2/3 name is empty!\n'
+. $asserts/files/equals.sh "${STDERR}" $'Argument name 2/3 is empty!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
 ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR '' >"${STDOUT}" 2>"${STDERR}"
 . $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
 . $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" $'Argument 3/3 name is empty!\n'
+. $asserts/files/equals.sh "${STDERR}" $'Argument name 3/3 is empty!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
