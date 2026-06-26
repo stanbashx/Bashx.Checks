@@ -2,7 +2,7 @@
 
 REP_OWNER='stanbashx'
 REP_NAME='Bashx.Checks'
-VERSION='0.0.3'
+VERSION='0.0.5'
 
 if [[ -d 'build' ]]; then
  echo 'Build dir exists!' >&2; exit 1; fi
