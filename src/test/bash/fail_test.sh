@@ -26,7 +26,7 @@ STDERR="$(mktemp)"
 :> "${STDOUT}"
 :> "${STDERR}"
 "${SCRIPT}" >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
@@ -34,7 +34,7 @@ STDERR="$(mktemp)"
 :> "${STDERR}"
 CHECKS_MESSAGE=''
 "${SCRIPT}" "${CHECKS_MESSAGE}" >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No message!\n'
 
@@ -42,7 +42,7 @@ CHECKS_MESSAGE=''
 :> "${STDERR}"
 CHECKS_MESSAGE='foo'
 "${SCRIPT}" "${CHECKS_MESSAGE}" >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
 
