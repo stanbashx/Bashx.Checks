@@ -23,7 +23,28 @@ STDERR="$(mktemp)"
 
 #
 
-echo 'Not implemented!'; exit 1 # todo
+:> "${STDOUT}"
+:> "${STDERR}"
+"${SCRIPT}" >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_MESSAGE=''
+"${SCRIPT}" "${CHECKS_MESSAGE}" >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No message!\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_MESSAGE='foo'
+"${SCRIPT}" "${CHECKS_MESSAGE}" >"${STDOUT}" 2>"${STDERR}"
+. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
 
 #
 
