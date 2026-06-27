@@ -81,6 +81,32 @@ CHECKS_EXPECTED=''
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No expected!\n'
 
+VALUES=('a' '-' ' ' $'\n' $'\t' '-0' '+0' '+1' '0.5' '0,5' '05')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL='42'
+ CHECKS_EXPECTED="${VALUE}"
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "Expected(${#CHECKS_EXPECTED}): \"${CHECKS_EXPECTED}\" is not a number!"$'\n'
+done
+
+VALUES=('-2147483649' '2147483648')
+ for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL='42'
+ CHECKS_EXPECTED="${VALUE}"
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "Expected: ${CHECKS_EXPECTED} is not an int32!"$'\n'
+done
+
+#
+
 echo 'Not implemented!'; exit 1 # todo
 
 #
