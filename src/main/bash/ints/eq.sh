@@ -1,7 +1,8 @@
 #!/usr/local/bin/bash
 
+CHECKS_MESSAGE="$3"
+
 if [[ $# -eq 3 ]]; then
- CHECKS_MESSAGE="$3"
  if [[ -z "${CHECKS_MESSAGE}" ]]; then
   echo 'No message!' >&2; exit 1; fi
 elif [[ $# -ne 2 ]]; then
@@ -25,6 +26,6 @@ elif ((CHECKS_EXPECTED < -2147483648 || CHECKS_EXPECTED > 2147483647)); then
 fi
 
 if [[ "${CHECKS_ACTUAL}" -ne "${CHECKS_EXPECTED}" ]]; then
- [[ -v CHECKS_MESSAGE ]] && echo "${CHECKS_MESSAGE}" >&2
+ [[ -n "${CHECKS_MESSAGE}" ]] && echo "${CHECKS_MESSAGE}" >&2
  exit 1
 fi
