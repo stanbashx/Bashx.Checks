@@ -41,6 +41,18 @@ STDERR="$(mktemp)"
 :> "${STDERR}"
 CHECKS_ACTUAL=''
 CHECKS_EXPECTED=''
+CHECKS_MESSAGE=''
+"${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No message!\n'
+
+#
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL=''
+CHECKS_EXPECTED=''
 "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
