@@ -46,6 +46,32 @@ CHECKS_EXPECTED=''
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No actual!\n'
 
+VALUES=('a' '-' ' ' $'\n' $'\t' '-0' '+0' '+1' '0.5' '0,5' '05')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL="${VALUE}"
+ CHECKS_EXPECTED=''
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "Actual(${#CHECKS_ACTUAL}): \"${CHECKS_ACTUAL}\" is not a number!"$'\n'
+done
+
+VALUES=('-2147483649' '2147483648')
+ for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL="${VALUE}"
+ CHECKS_EXPECTED=''
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "Actual: ${CHECKS_ACTUAL} is not an int32!"$'\n'
+done
+
+#
+
 :> "${STDOUT}"
 :> "${STDERR}"
 CHECKS_ACTUAL='1'
