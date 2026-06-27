@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 
-SCRIPT='src/main/bash/strings/eq.sh'
+SCRIPT='src/main/bash/ints/eq.sh'
 
 echo "Running test for \"${SCRIPT}\"..."
 
@@ -36,6 +36,24 @@ STDERR="$(mktemp)"
 . $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
 #
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL=''
+CHECKS_EXPECTED=''
+"${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No actual!\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='1'
+CHECKS_EXPECTED=''
+"${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'No expected!\n'
 
 echo 'Not implemented!'; exit 1 # todo
 
