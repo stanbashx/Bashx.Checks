@@ -59,7 +59,7 @@ for VALUE in "${VALUES[@]}"; do
 done
 
 VALUES=('-2147483649' '2147483648')
- for VALUE in "${VALUES[@]}"; do
+for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
  :> "${STDERR}"
  CHECKS_ACTUAL="${VALUE}"
@@ -94,7 +94,7 @@ for VALUE in "${VALUES[@]}"; do
 done
 
 VALUES=('-2147483649' '2147483648')
- for VALUE in "${VALUES[@]}"; do
+for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
  :> "${STDERR}"
  CHECKS_ACTUAL='42'
@@ -107,7 +107,39 @@ done
 
 #
 
-echo 'Not implemented!'; exit 1 # todo
+VALUES=('-42' '-8' '0' '1' '2' '4' '8' '16' '32' '64' '-2147483648' '2147483647')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL='42'
+ CHECKS_EXPECTED="${VALUE}"
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ CHECKS_MESSAGE='foo'
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+done
+
+VALUES=('-42' '-8' '0' '1' '2' '4' '8' '16' '32' '64' '-2147483648' '2147483647')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_ACTUAL="${VALUE}"
+ CHECKS_EXPECTED="${VALUE}"
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ CHECKS_MESSAGE='foo'
+ "${SCRIPT}" "${CHECKS_ACTUAL}" "${CHECKS_EXPECTED}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+done
 
 #
 
