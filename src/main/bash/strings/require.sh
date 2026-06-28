@@ -7,6 +7,8 @@ for ((CHECKS_INDEX=1; CHECKS_INDEX<=$#; CHECKS_INDEX++)); do
  CHECKS_ARGUMENT="${!CHECKS_INDEX}"
  if [[ -z "${CHECKS_ARGUMENT}" ]]; then
   echo "Argument ${CHECKS_INDEX}/$# is empty!" >&2; exit 1
+ elif [[ ! "${CHECKS_ARGUMENT}" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]; then
+  echo "Argument ${CHECKS_INDEX}/$# is wrong!" >&2; exit 1
  elif [[ ! -v "${CHECKS_ARGUMENT}" ]]; then
   echo "Variable \"${CHECKS_ARGUMENT}\" is unset!" >&2; exit 1
  elif [[ -z "${!CHECKS_ARGUMENT}" ]]; then
