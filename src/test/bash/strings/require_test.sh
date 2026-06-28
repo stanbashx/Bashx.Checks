@@ -19,6 +19,15 @@ STDERR="$(mktemp)"
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No arguments!\n'
 
+#
+
+:> "${STDOUT}"
+:> "${STDERR}"
+"${SCRIPT}" ASSERTS_FOO > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Argument "ASSERTS_FOO" is unset!\n'
+
 :> "${STDOUT}"
 :> "${STDERR}"
 ASSERTS_FOO='' "${SCRIPT}" ASSERTS_FOO > "${STDOUT}" 2> "${STDERR}"
