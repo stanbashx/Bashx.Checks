@@ -119,23 +119,24 @@ done
 
 #
 
-VALUES=('64' '128' '256' '2147483647')
-for VALUE in "${VALUES[@]}"; do
- :> "${STDOUT}"
- :> "${STDERR}"
- CHECKS_VAL='42'
- CHECKS_REF="${VALUE}"
- "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" > "${STDOUT}" 2> "${STDERR}"
- . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
- . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDERR}"
- :> "${STDOUT}"
- :> "${STDERR}"
- CHECKS_MESSAGE='foo'
- "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
- . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
- . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDERR}"
+VALUES=('-2147483648' '-42' '-8' '0' '1' '2' '4' '8' '16' '32')
+REFERENCES=('64' '128' '256' '2147483647')
+for CHECKS_VAL in "${VALUES[@]}"; do
+ for CHECKS_REF in "${REFERENCES[@]}"; do
+  :> "${STDOUT}"
+  :> "${STDERR}"
+  "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" > "${STDOUT}" 2> "${STDERR}"
+  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+  . $asserts/files/empty.sh "${STDOUT}"
+  . $asserts/files/empty.sh "${STDERR}"
+  :> "${STDOUT}"
+  :> "${STDERR}"
+  CHECKS_MESSAGE='foo'
+  "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+  . $asserts/files/empty.sh "${STDOUT}"
+  . $asserts/files/empty.sh "${STDERR}"
+ done
 done
 
 VALUES=('-2147483648' '-42' '-8' '0' '1' '2' '4' '8' '16' '32' '42')
