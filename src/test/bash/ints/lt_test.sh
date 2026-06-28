@@ -119,8 +119,8 @@ done
 
 #
 
-VALUES=('-2147483648' '-42' '-8' '0' '1' '2' '4' '8' '16' '32')
-REFERENCES=('64' '128' '256' '2147483647')
+VALUES=('-2147483648' '-64' '-16' '-4' '-1' '0' '1' '4' '16' '64')
+REFERENCES=('128' '256' '512' '1024' '2147483647')
 for CHECKS_VAL in "${VALUES[@]}"; do
  for CHECKS_REF in "${REFERENCES[@]}"; do
   :> "${STDOUT}"
@@ -139,8 +139,8 @@ for CHECKS_VAL in "${VALUES[@]}"; do
  done
 done
 
-VALUES=('42' '64' '128' '256' '2147483647')
-REFERENCES=('-2147483648' '-42' '-8' '0' '1' '2' '4' '8' '16' '32')
+VALUES=('128' '256' '512' '1024' '2147483647')
+REFERENCES=('-2147483648' '-64' '-16' '-4' '-1' '0' '1' '4' '16' '64')
 for CHECKS_VAL in "${VALUES[@]}"; do
  for CHECKS_REF in "${REFERENCES[@]}"; do
   :> "${STDOUT}"
