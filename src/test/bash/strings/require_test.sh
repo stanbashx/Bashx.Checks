@@ -47,29 +47,45 @@ ASSERTS_BAR='2' \
 
 #
 
-"${SCRIPT}" '0ASSERTS_FOO' > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
-. $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
-
-"${SCRIPT}" '-ASSERTS_FOO' > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
-. $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
-
-VALUES=(' ' $'\n' $'\t')
+VALUES=('0' '-')
 for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ "${SCRIPT}" "${VALUE}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
  :> "${STDOUT}"
  :> "${STDERR}"
  "${SCRIPT}" "${VALUE}ASSERTS_FOO" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
  . $asserts/files/empty.sh "${STDOUT}"
  . $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
+done
+
+VALUES=(' ' $'\n' $'\t')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ "${SCRIPT}" "${VALUE}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ "${SCRIPT}" "${VALUE}ASSERTS_FOO" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" $'Argument 1/1 is wrong!\n'
+ :> "${STDOUT}"
+ :> "${STDERR}"
  ASSERTS_FOO='1' \
   "${SCRIPT}" ASSERTS_FOO "ASSERTS${VALUE}BAR" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
  . $asserts/files/empty.sh "${STDOUT}"
  . $asserts/files/equals.sh "${STDERR}" $'Argument 2/2 is wrong!\n'
+ :> "${STDOUT}"
+ :> "${STDERR}"
  ASSERTS_FOO='1' \
   ASSERTS_BAR='2' \
   "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR "ASSERTS_BAZ${VALUE}" > "${STDOUT}" 2> "${STDERR}"
