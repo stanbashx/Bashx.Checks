@@ -138,23 +138,23 @@ for VALUE in "${VALUES[@]}"; do
  . $asserts/files/empty.sh "${STDERR}"
 done
 
-echo 'Not implemented!'; exit 1 # todo
-
-VALUES=('-42' '-8' '0' '1' '2' '4' '8' '16' '32' '64' '-2147483648' '2147483647')
+VALUES=('-2147483648' '-42' '-8' '0' '1' '2' '4' '8' '16' '32' '42')
 for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
  :> "${STDERR}"
- CHECKS_VAL="${VALUE}"
+ CHECKS_VAL='42'
  CHECKS_REF="${VALUE}"
  "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" > "${STDOUT}" 2> "${STDERR}"
- . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
  . $asserts/files/empty.sh "${STDOUT}"
  . $asserts/files/empty.sh "${STDERR}"
+ :> "${STDOUT}"
+ :> "${STDERR}"
  CHECKS_MESSAGE='foo'
  "${SCRIPT}" "${CHECKS_VAL}" "${CHECKS_REF}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
- . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
  . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDERR}"
+ . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
 done
 
 #
