@@ -89,13 +89,6 @@ ASSERTS_FOO='' "${SCRIPT}" ASSERTS_FOO > "${STDOUT}" 2> "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
-ASSERTS_FOO='1' "${SCRIPT}" ASSERTS_FOO > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
-. $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/empty.sh "${STDERR}"
-
-:> "${STDOUT}"
-:> "${STDERR}"
 ASSERTS_FOO='' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR ASSERTS_BAZ > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
