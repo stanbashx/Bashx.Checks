@@ -14,64 +14,66 @@ STDERR="$(mktemp)"
 
 #
 
-"${SCRIPT}" >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+:> "${STDOUT}"
+:> "${STDERR}"
+"${SCRIPT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" '' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" '' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" '' '' '' '' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" '' '' '' '' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'Wrong arguments!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'a' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" 'a' 'a' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'b' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '0'
+"${SCRIPT}" 'a' 'b' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'a' 'c' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" 'a' 'a' 'c' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'c\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'b' 'c' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '0'
+"${SCRIPT}" 'a' 'b' 'c' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'a' '' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" 'a' 'a' '' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No message!\n'
 
 :> "${STDOUT}"
 :> "${STDERR}"
-"${SCRIPT}" 'a' 'b' '' >"${STDOUT}" 2>"${STDERR}"
-. $asserts/strings/eq.sh "${SCRIPT}" "$?" '1'
+"${SCRIPT}" 'a' 'b' '' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'No message!\n'
 

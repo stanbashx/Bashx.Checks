@@ -1,19 +1,18 @@
 #!/usr/local/bin/bash
 
-if [[ $# -lt 2 || $# -gt 3 ]]; then
- echo 'Wrong arguments!' >&2; exit 1; fi
+CHECKS_MESSAGE="$3"
+
+if [[ $# -eq 3 ]]; then
+ if [[ -z "${CHECKS_MESSAGE}" ]]; then
+  echo 'No message!' >&2; exit 1; fi
+elif [[ $# -ne 2 ]]; then
+ echo 'Wrong arguments!' >&2; exit 1
+fi
 
 CHECKS_ACTUAL="$1"
 CHECKS_EXPECTED="$2"
 
-if [[ $# -eq 3 ]]; then
- CHECKS_MESSAGE="$3"
- if [[ -z "${CHECKS_MESSAGE}" ]]; then
-  echo 'No message!' >&2; exit 1; fi
-fi
-
 if [[ "${CHECKS_ACTUAL}" == "${CHECKS_EXPECTED}" ]]; then
- if [[ -n "${CHECKS_MESSAGE}" ]]; then
-  echo "${CHECKS_MESSAGE}" >&2; fi
+ [[ -n "${CHECKS_MESSAGE}" ]] && echo "${CHECKS_MESSAGE}" >&2
  exit 1
 fi
