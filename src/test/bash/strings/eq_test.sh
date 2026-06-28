@@ -14,6 +14,8 @@ STDERR="$(mktemp)"
 
 #
 
+:> "${STDOUT}"
+:> "${STDERR}"
 "${SCRIPT}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
