@@ -28,6 +28,23 @@ STDERR="$(mktemp)"
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'Variable "ASSERTS_FOO" is unset!\n'
 
+:> "${STDOUT}"
+:> "${STDERR}"
+ASSERTS_FOO='1' \
+ "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Variable "ASSERTS_BAR" is unset!\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+ASSERTS_FOO='1' \
+ASSERTS_BAR='2' \
+ "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR ASSERTS_BAZ > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" $'Variable "ASSERTS_BAZ" is unset!\n'
+
 VALUES=(' ' $'\n' $'\t' '0' '-')
 for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
