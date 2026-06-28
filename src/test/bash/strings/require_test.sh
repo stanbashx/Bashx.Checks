@@ -71,7 +71,7 @@ for VALUE in "${VALUES[@]}"; do
  . $asserts/files/empty.sh "${STDOUT}"
  . $asserts/files/equals.sh "${STDERR}" $'Argument 2/2 is wrong!\n'
  ASSERTS_FOO='1' \
- ASSERTS_BAR='2' \
+  ASSERTS_BAR='2' \
   "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR "ASSERTS_BAZ${VALUE}" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
  . $asserts/files/empty.sh "${STDOUT}"
@@ -136,9 +136,31 @@ ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" ASSERTS_FOO ASSERTS_
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" $'Argument 3/3 is empty!\n'
 
+#
+
 :> "${STDOUT}"
 :> "${STDERR}"
-ASSERTS_FOO='1' ASSERTS_BAR='2' ASSERTS_BAZ='3' "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR ASSERTS_BAZ > "${STDOUT}" 2> "${STDERR}"
+ASSERTS_FOO='1' \
+ "${SCRIPT}" ASSERTS_FOO > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+ASSERTS_FOO='1' \
+ ASSERTS_BAR='2' \
+ "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+ASSERTS_FOO='1' \
+ ASSERTS_BAR='2' \
+ ASSERTS_BAZ='3' \
+ "${SCRIPT}" ASSERTS_FOO ASSERTS_BAR ASSERTS_BAZ > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
