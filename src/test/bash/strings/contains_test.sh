@@ -79,6 +79,27 @@ CHECKS_MESSAGE='c'
 
 #
 
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_TEXT='a'
+CHECKS_SUBTEXT='a'
+"${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_TEXT='a'
+CHECKS_SUBTEXT='a'
+CHECKS_MESSAGE='c'
+"${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+#
+
 VALUES=('-' '--' '--foo' 'foo--' '--foo--')
 for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
