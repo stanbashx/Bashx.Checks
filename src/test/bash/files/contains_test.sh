@@ -108,41 +108,32 @@ for EXIT_CODE in "${EXIT_CODES[@]}"; do
  rm "${CHECKS_PATH}"
 done
 
-#
-
-echo 'Not implemented!'; exit 1 # todo
-
+:> "${STDOUT}"
 :> "${STDERR}"
-TMP_PATH="$(mktemp)"
-printf '%s' 'foo' > "${TMP_PATH}"
-"${SCRIPT}" "${TMP_PATH}" "${ASSERTS_SUBTEXT}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '1' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-EXPECTED_VALUE="\"${TMP_PATH}\"
-does not contain:
----(${#ASSERTS_SUBTEXT})
-${ASSERTS_SUBTEXT}
----"
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ "${ACTUAL_VALUE}" != "${EXPECTED_VALUE}" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
+CHECKS_PATH="$(mktemp)"
+printf '%s' 'foo' > "${CHECKS_PATH}"
+CHECKS_SUBTEXT='bar'
+"${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+rm "${CHECKS_PATH}"
 
-ACTUAL_TEXT='--foo--'
-ASSERTS_SUBTEXTS=('-' '--' '--foo' 'foo--' '--foo--')
-for ASSERTS_SUBTEXT in "${ASSERTS_SUBTEXTS[@]}"; do
+VALUES=('-' '--' '--foo' 'foo--' '--foo--')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
  :> "${STDERR}"
- printf '%s' "${ACTUAL_TEXT}" > "${TMP_PATH}"
- "${SCRIPT}" "${TMP_PATH}" "${ASSERTS_SUBTEXT}" 2>"${STDERR}"; CODE=$?
- if [[ "${CODE}" != '0' ]]; then
-  echo "Code(${CODE}) error!" >&2; exit 1; fi
- ACTUAL_VALUE="$(<"${STDERR}")"
- if [[ -n "${ACTUAL_VALUE}" ]]; then
-  echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
+ CHECKS_PATH="$(mktemp)"
+ printf '%s' '--foo--' > "${CHECKS_PATH}"
+ CHECKS_SUBTEXT="${VALUE}"
+ "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ rm "${CHECKS_PATH}"
 done
 
-ASSERTS_SUBTEXT='foo'
-ACTUAL_TEXTS=(
+VALUES=(
  'qux foo bar'
      'foo'      'foo foo'    'foo bar'
      'foox'    'xfoo'       'xfoox'
@@ -154,35 +145,37 @@ ACTUAL_TEXTS=(
  $'x\nfoo'   $'\nfoox'   $'x\nfoox'
  $'x\nfoo\n' $'\nfoo\nx' $'x\nfoo\nx'
 )
-for ACTUAL_TEXT in "${ACTUAL_TEXTS[@]}"; do
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
  :> "${STDERR}"
- printf '%s' "${ACTUAL_TEXT}" > "${TMP_PATH}"
- "${SCRIPT}" "${TMP_PATH}" "${ASSERTS_SUBTEXT}" 2>"${STDERR}"; CODE=$?
- if [[ "${CODE}" != '0' ]]; then
-  echo "Code(${CODE}) error!" >&2; exit 1; fi
- ACTUAL_VALUE="$(<"${STDERR}")"
- if [[ -n "${ACTUAL_VALUE}" ]]; then
-  echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
+ CHECKS_PATH="$(mktemp)"
+ printf '%s' "${VALUE}" > "${CHECKS_PATH}"
+ CHECKS_SUBTEXT='foo'
+ "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ rm "${CHECKS_PATH}"
 done
 
-ASSERTS_SUBTEXT=$'foo\nbar'
-ACTUAL_TEXTS=(
+VALUES=(
     $'foo\nbar\n' $'\nfoo\nbar'     $'\nfoo\nbar\n'
    $'xfoo\nbar\n'   $'foo\nbar\nx'   $'xfoo\nbar\nx'
  $'x\nfoo\nbar'   $'\nfoo\nbarx'   $'x\nfoo\nbarx'
  $'x\nfoo\nbar\n' $'\nfoo\nbar\nx' $'x\nfoo\nbar\nx'
 )
-for ACTUAL_TEXT in "${ACTUAL_TEXTS[@]}"; do
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
  :> "${STDERR}"
- printf '%s' "${ACTUAL_TEXT}" > "${TMP_PATH}"
- "${SCRIPT}" "${TMP_PATH}" "${ASSERTS_SUBTEXT}" 2>"${STDERR}"; CODE=$?
- if [[ "${CODE}" != '0' ]]; then
-  echo "Code(${CODE}) error!" >&2; exit 1; fi
- ACTUAL_VALUE="$(<"${STDERR}")"
- if [[ -n "${ACTUAL_VALUE}" ]]; then
-  echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
+ CHECKS_PATH="$(mktemp)"
+ printf '%s' "${VALUE}" > "${CHECKS_PATH}"
+ CHECKS_SUBTEXT=$'foo\nbar'
+ "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ rm "${CHECKS_PATH}"
 done
-rm "${TMP_PATH}"
 
 #
 
