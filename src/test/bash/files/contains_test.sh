@@ -81,38 +81,36 @@ CHECKS_SUBTEXT=''
 . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is empty!"$'\n'
 rm "${CHECKS_PATH}"
 
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_PATH="$(mktemp)"
+printf '%s' 'foo' > "${CHECKS_PATH}"
+CHECKS_SUBTEXT=''
+"${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" 'No subtext!'$'\n'
+rm "${CHECKS_PATH}"
+
+EXIT_CODES=(2 42 127)
+for EXIT_CODE in "${EXIT_CODES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_PATH="$(mktemp)"
+ printf '%s' 'foo' > "${CHECKS_PATH}"
+ CHECKS_SUBTEXT='bar'
+ PATH="$mocks/ripgrep/bin:${PATH}" \
+  MOCKS_RIPGREP_EXIT_CODE="${EXIT_CODE}" \
+  "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" read error!"$'\n'
+ rm "${CHECKS_PATH}"
+done
+
 #
 
 echo 'Not implemented!'; exit 1 # todo
-
-:> "${STDERR}"
-TMP_PATH="$(mktemp)"
-printf '%s' 'foo' > "${TMP_PATH}"
-"${SCRIPT}" "${TMP_PATH}" '' 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '1' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ "${ACTUAL_VALUE}" != 'No subtext!' ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
-
-ASSERTS_SUBTEXT='bar'
-
-TMP_PATH="$(mktemp)"
-printf '%s' 'foo' > "${TMP_PATH}"
-EXIT_CODES=(2 42 127)
-for MOCKS_RG_EXIT_CODE in "${EXIT_CODES[@]}"; do
- :> "${STDERR}"
- PATH="src/test/bash/mocks/ripgrep/bin:${PATH}" \
-  MOCKS_RG_EXIT_CODE="${MOCKS_RG_EXIT_CODE}" \
-  "${SCRIPT}" "${TMP_PATH}" "${ASSERTS_SUBTEXT}" 2>"${STDERR}"; CODE=$?
- if [[ "${CODE}" != '1' ]]; then
-  echo "Code(${CODE}) error!" >&2; exit 1; fi
- ACTUAL_VALUE="$(<"${STDERR}")"
- if [[ "${ACTUAL_VALUE}" != 'Read file error!' ]]; then
-  echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-done
-rm "${TMP_PATH}"
 
 :> "${STDERR}"
 TMP_PATH="$(mktemp)"
