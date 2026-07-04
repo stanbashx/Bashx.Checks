@@ -65,7 +65,7 @@ CHECKS_SUBTEXT='b'
 "${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
@@ -88,7 +88,7 @@ for VALUE in "${VALUES[@]}"; do
  "${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
  . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
 done
 
 VALUES=(
@@ -111,7 +111,7 @@ for VALUE in "${VALUES[@]}"; do
  "${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
  . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
 done
 
 VALUES=(
@@ -128,7 +128,7 @@ for VALUE in "${VALUES[@]}"; do
  "${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
  . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
  . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
 done
 
 #
