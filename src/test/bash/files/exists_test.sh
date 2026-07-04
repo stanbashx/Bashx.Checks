@@ -67,6 +67,8 @@ CHECKS_PATH="$(mktemp -d)"
 . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is not a file!"$'\n'
 rm -r "${CHECKS_PATH}"
 
+#
+
 :> "${STDOUT}"
 :> "${STDERR}"
 CHECKS_PATH="$(mktemp)"
