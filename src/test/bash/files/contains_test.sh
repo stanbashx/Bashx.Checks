@@ -124,7 +124,7 @@ CHECKS_MESSAGE=''
 "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/equals.sh "${STDERR}" 'No message!'$'\n'
+. $asserts/files/equals.sh "${STDERR}" 'No message!'$'\n'
 rm "${CHECKS_PATH}"
 
 :> "${STDOUT}"
