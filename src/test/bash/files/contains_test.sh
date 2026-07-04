@@ -125,6 +125,18 @@ rm "${CHECKS_PATH}"
 CHECKS_PATH="$(mktemp)"
 printf '%s' 'foo' > "${CHECKS_PATH}"
 CHECKS_SUBTEXT='bar'
+CHECKS_MESSAGE='qux'
+"${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+rm "${CHECKS_PATH}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_PATH="$(mktemp)"
+printf '%s' 'foo' > "${CHECKS_PATH}"
+CHECKS_SUBTEXT='bar'
 "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
