@@ -67,6 +67,27 @@ CHECKS_PATH="$(mktemp -d)"
 . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is not a file!"$'\n'
 rm -r "${CHECKS_PATH}"
 
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_PATH="$(mktemp)"
+"${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is empty!"$'\n'
+rm "${CHECKS_PATH}"
+
+echo 'Not implemented!'; exit 1 # todo
+
+VALUES=(
+ 'a' ' ' $'\t' $'\n' $'\r' $'\v' $'\f' $'\x01'
+ '!' '"' '#' '$' '%' '&' "'" '(' ')' '*' '+' ',' '-' '.' '/'
+ ':' ';' '<' '=' '>' '?' '@' '[' ']' '^' '_' '`' '{' '|' '}' '~' '\'
+)
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+done
+
 echo 'Not implemented!'; exit 1 # todo
 
 :> "${STDERR}"
