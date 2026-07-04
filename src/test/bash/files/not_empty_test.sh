@@ -76,9 +76,8 @@ CHECKS_PATH="$(mktemp)"
 . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is empty!"$'\n'
 rm "${CHECKS_PATH}"
 
-echo 'Not implemented!'; exit 1 # todo
-
 VALUES=(
+ 'foo' 'foo bar baz' '42'
  'a' ' ' $'\t' $'\n' $'\r' $'\v' $'\f' $'\x01'
  '!' '"' '#' '$' '%' '&' "'" '(' ')' '*' '+' ',' '-' '.' '/'
  ':' ';' '<' '=' '>' '?' '@' '[' ']' '^' '_' '`' '{' '|' '}' '~' '\'
@@ -86,50 +85,14 @@ VALUES=(
 for VALUE in "${VALUES[@]}"; do
  :> "${STDOUT}"
  :> "${STDERR}"
+ CHECKS_PATH="$(mktemp)"
+ printf '%s' "${VALUE}" > "${CHECKS_PATH}"
+ "${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+ rm "${CHECKS_PATH}"
 done
-
-echo 'Not implemented!'; exit 1 # todo
-
-:> "${STDERR}"
-
-TMP_PATH="$(mktemp)"
-"${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '1' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ "${ACTUAL_VALUE}" != "\"${TMP_PATH}\" is empty!" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
-
-TMP_PATH="$(mktemp)"
-ACTUAL_TEXTS=(
- 'a' ' ' $'\t' $'\n' $'\r' $'\v' $'\f' $'\x01'
- '!' '"' '#' '$' '%' '&' "'" '(' ')' '*' '+' ',' '-' '.' '/'
- ':' ';' '<' '=' '>' '?' '@' '[' ']' '^' '_' '`' '{' '|' '}' '~' '\'
-)
-for ACTUAL_TEXT in "${ACTUAL_TEXTS[@]}"; do
- :> "${STDERR}"
- printf '%s' "${ACTUAL_TEXT}" > "${TMP_PATH}"
- "${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
- if [[ "${CODE}" != '0' ]]; then
-  echo "Code(${CODE}) error!" >&2; exit 1; fi
- ACTUAL_VALUE="$(<"${STDERR}")"
- if [[ -n "${ACTUAL_VALUE}" ]]; then
-  echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-done
-rm "${TMP_PATH}"
-
-:> "${STDERR}"
-
-TMP_PATH="$(mktemp)"
-printf '42' > "${TMP_PATH}"
-"${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '0' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ -n "${ACTUAL_VALUE}" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
 
 #
 
