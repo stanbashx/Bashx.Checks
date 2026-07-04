@@ -23,6 +23,13 @@ STDERR="$(mktemp)"
 
 :> "${STDOUT}"
 :> "${STDERR}"
+"${SCRIPT}" '' > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" 'Wrong arguments!'$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
 "${SCRIPT}" '' '' '' '' > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
@@ -129,7 +136,7 @@ CHECKS_MESSAGE='qux'
 "${SCRIPT}" "${CHECKS_PATH}" "${CHECKS_SUBTEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
- . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+. $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
 rm "${CHECKS_PATH}"
 
 :> "${STDOUT}"
