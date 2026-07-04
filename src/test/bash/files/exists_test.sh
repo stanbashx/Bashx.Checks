@@ -28,6 +28,8 @@ STDERR="$(mktemp)"
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" 'Wrong arguments!'$'\n'
 
+#
+
 :> "${STDOUT}"
 :> "${STDERR}"
 CHECKS_PATH=''
@@ -40,47 +42,39 @@ CHECKS_PATH=''
 :> "${STDERR}"
 CHECKS_PATH="$(mktemp)"
 rm "${CHECKS_PATH}"
+ln -s "${CHECKS_PATH}" "${CHECKS_PATH}"
+"${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is a symlink!"$'\n'
+rm "${CHECKS_PATH}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_PATH="$(mktemp)"
+rm "${CHECKS_PATH}"
 "${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
 . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" does not exist!"$'\n'
 
-echo 'Not implemented!'; exit 1 # todo
-
+:> "${STDOUT}"
 :> "${STDERR}"
+CHECKS_PATH="$(mktemp -d)"
+"${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_PATH}\" is not a file!"$'\n'
+rm -r "${CHECKS_PATH}"
 
-TMP_PATH="$(mktemp -d)"
-"${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '1' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ "${ACTUAL_VALUE}" != "\"${TMP_PATH}\" is not a file!" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm -rf "${TMP_PATH}"
-
+:> "${STDOUT}"
 :> "${STDERR}"
-
-TMP_PATH="$(mktemp)"
-rm "${TMP_PATH}"
-ln -s "${TMP_PATH}" "${TMP_PATH}" && [[ -L "${TMP_PATH}" ]] || exit 1
-"${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '1' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ "${ACTUAL_VALUE}" != "\"${TMP_PATH}\" is a symlink!" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
-
-:> "${STDERR}"
-
-TMP_PATH="$(mktemp)"
-"${SCRIPT}" "${TMP_PATH}" 2>"${STDERR}"; CODE=$?
-if [[ "${CODE}" != '0' ]]; then
- echo "Code(${CODE}) error!" >&2; exit 1; fi
-ACTUAL_VALUE="$(<"${STDERR}")"
-if [[ -n "${ACTUAL_VALUE}" ]]; then
- echo "Actual value(${#ACTUAL_VALUE}) is: \"${ACTUAL_VALUE}\"!" >&2; exit 1; fi
-rm "${TMP_PATH}"
+CHECKS_PATH="$(mktemp)"
+"${SCRIPT}" "${CHECKS_PATH}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+rm "${CHECKS_PATH}"
 
 #
 
