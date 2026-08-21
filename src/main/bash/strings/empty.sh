@@ -10,6 +10,6 @@ elif [[ $# -ne 1 ]]; then
 fi
 
 if [[ -n "$1" ]]; then
- [[ -n "${CHECKS_MESSAGE}" ]] && echo "${CHECKS_MESSAGE}" >&2
+ [[ -n "${CHECKS_MESSAGE}" ]] && printf '%s\n' "${CHECKS_MESSAGE}" >&2
  exit 1
 fi
