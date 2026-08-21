@@ -58,14 +58,17 @@ for VALUE in "${VALUES[@]}"; do
  . $asserts/files/empty.sh "${STDERR}"
 done
 
-:> "${STDOUT}"
-:> "${STDERR}"
-CHECKS_TEXT='42'
-CHECKS_MESSAGE='foo'
-"${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
-. $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+VALUES=('foo' '-n' '-e')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_TEXT='42'
+ CHECKS_MESSAGE="${VALUE}"
+ "${SCRIPT}" "${CHECKS_TEXT}" "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+done
 
 :> "${STDOUT}"
 :> "${STDERR}"
