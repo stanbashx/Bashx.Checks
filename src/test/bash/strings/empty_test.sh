@@ -47,13 +47,16 @@ CHECKS_MESSAGE='foo'
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
-:> "${STDOUT}"
-:> "${STDERR}"
-CHECKS_TEXT='42'
-"${SCRIPT}" "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
-. $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/empty.sh "${STDERR}"
+VALUES=('42' ' ' $'\t' $'\n')
+for VALUE in "${VALUES[@]}"; do
+ :> "${STDOUT}"
+ :> "${STDERR}"
+ CHECKS_TEXT="${VALUE}"
+ "${SCRIPT}" "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
+ . $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+ . $asserts/files/empty.sh "${STDOUT}"
+ . $asserts/files/empty.sh "${STDERR}"
+done
 
 :> "${STDOUT}"
 :> "${STDERR}"
