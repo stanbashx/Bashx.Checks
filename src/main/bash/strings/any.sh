@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 
 if [[ $# -lt 4 ]]; then
- echo 'Wrong arguments!' >&2; exit 1;fi
+ echo 'Wrong arguments!' >&2; exit 1; fi
 
 CHECKS_ACTUAL="$1"
 
@@ -19,9 +19,9 @@ for ((CHECKS_NUMBER=2; CHECKS_NUMBER<$#; CHECKS_NUMBER++)); do
  if [[ -z "${CHECKS_ARGUMENT}" ]]; then
   echo "Argument $((CHECKS_NUMBER - 1))/$(($# - 2)) is empty!" >&2; exit 1
  elif [[ "${CHECKS_ACTUAL}" == "${CHECKS_ARGUMENT}" ]]; then
-  CHECKS_FOUND="${CHECKS_NUMBER}"; break
+  CHECKS_FOUND="$((CHECKS_NUMBER - 1))"; break
  fi
 done
 
-if [[ "${CHECKS_FOUND}" -lt 2 ]]; then
+if [[ "${CHECKS_FOUND}" -lt 1 ]]; then
  printf '%s\n' "${CHECKS_MESSAGE}" >&2; exit 1; fi
