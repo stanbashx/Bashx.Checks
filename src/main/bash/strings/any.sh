@@ -13,14 +13,17 @@ CHECKS_MESSAGE="${!#}"
 if [[ -z "${CHECKS_MESSAGE}" ]]; then
  echo 'No message!' >&2; exit 1; fi
 
-CHECKS_FOUND=0
 for ((CHECKS_NUMBER=2; CHECKS_NUMBER<$#; CHECKS_NUMBER++)); do
  CHECKS_ARGUMENT="${!CHECKS_NUMBER}"
  if [[ -z "${CHECKS_ARGUMENT}" ]]; then
-  echo "Argument $((CHECKS_NUMBER - 1))/$(($# - 2)) is empty!" >&2; exit 1
- elif [[ "${CHECKS_ACTUAL}" == "${CHECKS_ARGUMENT}" ]]; then
-  CHECKS_FOUND="$((CHECKS_NUMBER - 1))"; break
- fi
+  echo "Argument $((CHECKS_NUMBER - 1))/$(($# - 2)) is empty!" >&2; exit 1; fi
+done
+
+CHECKS_FOUND=0
+for ((CHECKS_NUMBER=2; CHECKS_NUMBER<$#; CHECKS_NUMBER++)); do
+ CHECKS_ARGUMENT="${!CHECKS_NUMBER}"
+ if [[ "${CHECKS_ACTUAL}" == "${CHECKS_ARGUMENT}" ]]; then
+  CHECKS_FOUND="$((CHECKS_NUMBER - 1))"; break; fi
 done
 
 if [[ "${CHECKS_FOUND}" -lt 1 ]]; then

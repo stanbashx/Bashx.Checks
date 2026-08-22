@@ -118,9 +118,9 @@ CHECKS_MESSAGE='testmessage'
 CHECKS_ACTUAL='42'
 CHECKS_MESSAGE='testmessage'
 "${SCRIPT}" "${CHECKS_ACTUAL}" '42' '' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
-. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
 . $asserts/files/empty.sh "${STDOUT}"
-. $asserts/files/empty.sh "${STDERR}"
+. $asserts/files/equals.sh "${STDERR}" 'Argument 2/2 is empty!'$'\n'
 
 #
 
