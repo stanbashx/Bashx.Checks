@@ -59,7 +59,50 @@ CHECKS_MESSAGE=''
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/equals.sh "${STDERR}" 'No message!'$'\n'
 
-echo 'Not implemented!'; exit 1
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" '' '' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" 'Argument 1/2 is empty!'$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" 'foo' '' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" 'Argument 2/2 is empty!'$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" 'foo' 'bar' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" '42' 'bar' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" 'foo' '42' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
 #
 
