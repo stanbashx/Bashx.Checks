@@ -104,6 +104,24 @@ CHECKS_MESSAGE='testmessage'
 . $asserts/files/empty.sh "${STDOUT}"
 . $asserts/files/empty.sh "${STDERR}"
 
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" '' '42' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 1
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" 'Argument 1/2 is empty!'$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_ACTUAL='42'
+CHECKS_MESSAGE='testmessage'
+"${SCRIPT}" "${CHECKS_ACTUAL}" '42' '' "${CHECKS_MESSAGE}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" 0
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
+
 #
 
 rm "${STDOUT}"
