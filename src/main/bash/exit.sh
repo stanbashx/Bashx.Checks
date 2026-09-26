@@ -38,7 +38,9 @@ if [[ -v CHECKS_STDOUT ]]; then
  if [[ -z "${CHECKS_STDOUT}" ]]; then
   echo 'No stdout!' >&2; exit 1; fi
  printf '%s\n' "${CHECKS_STDOUT}"
-elif [[ -v CHECKS_STDERR ]]; then
+fi
+
+if [[ -v CHECKS_STDERR ]]; then
  if [[ -z "${CHECKS_STDERR}" ]]; then
   echo 'No stderr!' >&2; exit 1; fi
  printf '%s\n' "${CHECKS_STDERR}" >&2
