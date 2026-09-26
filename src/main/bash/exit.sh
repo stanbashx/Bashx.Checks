@@ -17,9 +17,9 @@ while [[ $# -gt 0 ]]; do
     echo "\"$1\" already used!" >&2; exit 1; fi
    CHECKS_STDOUT="$2"; shift 2;;
   '--stderr'|'-e')
-   if [[ -v CHECKS_STDOUT ]]; then
+   if [[ -v CHECKS_STDERR ]]; then
     echo "\"$1\" already used!" >&2; exit 1; fi
-   CHECKS_STDOUT="$2"; shift 2;;
+   CHECKS_STDERR="$2"; shift 2;;
   *) echo "\"$1\" is not supported!" >&2; exit 1;;
  esac
 done
