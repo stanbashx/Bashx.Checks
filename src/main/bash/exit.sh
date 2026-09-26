@@ -14,18 +14,12 @@ while [[ $# -gt 0 ]]; do
    CHECKS_EXIT_CODE="$2"; shift 2;;
   '--stdout'|'-o')
    if [[ -v CHECKS_STDOUT ]]; then
-    echo 'stdout already set!' >&2; exit 1
-   elif [[ -v CHECKS_STDERR ]]; then
-    echo 'stderr already set!' >&2; exit 1
-   fi
+    echo "\"$1\" already used!" >&2; exit 1; fi
    CHECKS_STDOUT="$2"; shift 2;;
   '--stderr'|'-e')
    if [[ -v CHECKS_STDOUT ]]; then
-    echo 'stdout already set!' >&2; exit 1
-   elif [[ -v CHECKS_STDERR ]]; then
-    echo 'stderr already set!' >&2; exit 1
-   fi
-   CHECKS_STDERR="$2"; shift 2;;
+    echo "\"$1\" already used!" >&2; exit 1; fi
+   CHECKS_STDOUT="$2"; shift 2;;
   *) echo "\"$1\" is not supported!" >&2; exit 1;;
  esac
 done
@@ -44,7 +38,7 @@ if [[ -v CHECKS_STDOUT ]]; then
  if [[ -z "${CHECKS_STDOUT}" ]]; then
   echo 'No stdout!' >&2; exit 1; fi
  printf '%s\n' "${CHECKS_STDOUT}"
-else
+elif [[ -v CHECKS_STDERR ]]; then
  if [[ -z "${CHECKS_STDERR}" ]]; then
   echo 'No stderr!' >&2; exit 1; fi
  printf '%s\n' "${CHECKS_STDERR}" >&2
