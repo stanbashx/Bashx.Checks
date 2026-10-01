@@ -5,8 +5,8 @@ A few check scripts.
 
 ## Release
 
-`0.0.8`
-| [GitHub](https://github.com/stanbashx/Bashx.Checks/releases/tag/0.0.8)
+`0.0.9`
+| [GitHub](https://github.com/stanbashx/Bashx.Checks/releases/tag/0.0.9)
 | [Key](https://stanbashx.github.io/release-public.pem)
 
 ### Build and Install
@@ -14,15 +14,15 @@ A few check scripts.
 ```
 $ ./assemble.sh \
  && ./src/test/bash/unit_test.sh \
- && unzip -d /opt/Bashx.Checks-0.0.8 ./build/zip/Bashx.Checks-0.0.8.zip
+ && unzip -d /opt/Bashx.Checks-0.0.9 ./build/zip/Bashx.Checks-0.0.9.zip
 ```
 
 ### Download and Install
 
 ```
 $ TMP_PATH="$(mktemp)"; \
- curl -L 'https://github.com/stanbashx/Bashx.Checks/releases/download/0.0.8/Bashx.Checks-0.0.8.zip' \
-  -o "${TMP_PATH}" && unzip -d /opt/Bashx.Checks-0.0.8 "${TMP_PATH}" && rm "${TMP_PATH}"
+ curl -L 'https://github.com/stanbashx/Bashx.Checks/releases/download/0.0.9/Bashx.Checks-0.0.9.zip' \
+  -o "${TMP_PATH}" && unzip -d /opt/Bashx.Checks-0.0.9 "${TMP_PATH}" && rm "${TMP_PATH}"
 ```
 
 ---
