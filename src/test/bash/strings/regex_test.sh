@@ -67,6 +67,25 @@ CHECKS_REGEX='f+'
 
 :> "${STDOUT}"
 :> "${STDERR}"
+CHECKS_REGEX='['
+CHECKS_TEXT=''
+"${SCRIPT}" -r "${CHECKS_REGEX}" -t "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_REGEX}\" is invalid!"$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_MESSAGE='error message'
+CHECKS_REGEX='['
+CHECKS_TEXT=''
+"${SCRIPT}" -m "${CHECKS_MESSAGE}" -r "${CHECKS_REGEX}" -t "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" '1'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/equals.sh "${STDERR}" "\"${CHECKS_REGEX}\" is invalid!"$'\n'
+
+:> "${STDOUT}"
+:> "${STDERR}"
 CHECKS_REGEX='f+'
 CHECKS_TEXT='bar'
 "${SCRIPT}" -r "${CHECKS_REGEX}" -t "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
@@ -85,6 +104,15 @@ CHECKS_TEXT='bar'
 . $asserts/files/equals.sh "${STDERR}" "${CHECKS_MESSAGE}"$'\n'
 
 #
+
+:> "${STDOUT}"
+:> "${STDERR}"
+CHECKS_REGEX='^$'
+CHECKS_TEXT=''
+"${SCRIPT}" -r "${CHECKS_REGEX}" -t "${CHECKS_TEXT}" > "${STDOUT}" 2> "${STDERR}"
+. $asserts/ints/eq.sh "${SCRIPT}" "$?" '0'
+. $asserts/files/empty.sh "${STDOUT}"
+. $asserts/files/empty.sh "${STDERR}"
 
 :> "${STDOUT}"
 :> "${STDERR}"
